@@ -1,0 +1,7 @@
+name: BattleRoyale
+version: '${project.version}'
+main: battleroyale.battleroyale.BattleRoyale
+commands:
+  item: {}
+  br: {}
+  worker: {}

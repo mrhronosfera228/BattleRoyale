@@ -8,8 +8,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class onPlayerGetDamage implements Listener {
-    public onPlayerGetDamage() {
-    }
+    public onPlayerGetDamage() {}
+
+    //Убрали дефолтный урон от всего, кроме падения и огня
     @EventHandler
     public void onPlayerGetDamage(EntityDamageEvent event) {
         event.setCancelled(true);

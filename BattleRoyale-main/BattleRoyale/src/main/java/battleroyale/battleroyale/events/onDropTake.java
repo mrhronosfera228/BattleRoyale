@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class onDropTake implements Listener {
+    //Получение дропа с убитого игрока
     @EventHandler
     public void onTakeDrop(PlayerInteractAtEntityEvent event) {
         Player player = event.getPlayer();
@@ -22,6 +23,7 @@ public class onDropTake implements Listener {
             }
         }
     }
+    //Получение денег в баланс через инвентарь умершего игрока
     @EventHandler
     public void onMoneyClick(InventoryClickEvent event) {
         if (event.getInventory().contains(Material.GOLD_INGOT)) {

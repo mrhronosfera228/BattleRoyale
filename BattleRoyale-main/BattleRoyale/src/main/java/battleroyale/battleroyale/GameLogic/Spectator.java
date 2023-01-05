@@ -17,6 +17,8 @@ import java.util.*;
 public class Spectator implements Listener {
     Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
     Map<String, Deque<String>> changePlayer = new HashMap<>();
+
+    //Реализация на лкм переключаться между тиммейтами
     @EventHandler
     public void onPlayerSpectate(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -40,6 +42,8 @@ public class Spectator implements Listener {
             }
         }
     }
+
+    //Отключить возможнось по шифту выйти из тиммейта
     @EventHandler
     public void onPlayerShifting(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();

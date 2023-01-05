@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class onPickUpItem implements Listener {
+    //Система поднятия денег с пола
     @EventHandler
     public void onPickupItem(EntityPickupItemEvent event) {
         if (event.getEntity() != null) {

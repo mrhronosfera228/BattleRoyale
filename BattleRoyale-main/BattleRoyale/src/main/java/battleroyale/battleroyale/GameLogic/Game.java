@@ -1,12 +1,13 @@
 package battleroyale.battleroyale.GameLogic;
 
 import battleroyale.battleroyale.BattleRoyale;
-import battleroyale.battleroyale.InventoryLoad;
-import battleroyale.battleroyale.PlayerTeamLoad;
-import battleroyale.battleroyale.TeamUnload;
+import battleroyale.battleroyale.loaders.InventoryLoad;
+import battleroyale.battleroyale.loaders.PlayerTeamLoad;
+import battleroyale.battleroyale.loaders.TeamUnload;
 import battleroyale.battleroyale.events.ItemClickChangeTeam;
 import battleroyale.battleroyale.events.RoyalPlayerDeathEvent;
 import battleroyale.battleroyale.player.RoyalPlayer;
+import battleroyale.battleroyale.player.RoyaleAlivePlayers;
 import battleroyale.battleroyale.utils.UtilColor;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
@@ -30,11 +31,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static battleroyale.battleroyale.ItemsLoad.qEpic;
-import static battleroyale.battleroyale.cars.SpawnArrow.arrowStart;
+import static battleroyale.battleroyale.loaders.ItemsLoad.qEpic;
+import static battleroyale.battleroyale.loaders.PlaneLoad.planeStart;
 
 public class Game implements Listener {
-    Random random = new Random();
     public static boolean GameStart = false;
     private static  Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
     public static boolean GameEnd = false;
@@ -42,26 +42,22 @@ public class Game implements Listener {
     public static Map<String, Integer> PlayerBalance = new HashMap<>();
     public static Map<String, Inventory> ShopInventory = new HashMap<>();
     public static Zone GameZone;
-    /*написать асихронку для бд сундуки воркеры фиксануть баг с сердцами и подумать еще как фиксануть армор стенды
-    и добавить рандом в сундуки
-     */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         player.getInventory().clear();
         player.setFoodLevel(20);
         if (InLobby) {
-            //фиксануть баг с заходом во время старта(10 секунд запретить заход)
             if (Bukkit.getServer().getOnlinePlayers().size() >= 2) {
                 StartGame();
             }
         }
+        //Start
         if (!GameStart) {
             player.setGameMode(GameMode.ADVENTURE);
             player.getInventory().addItem(CreateItem(Material.WOOL, "&6Выбор команды", "", 0));
             player.teleport(new Location(Bukkit.getWorld("battle"), 48, 18, 79));
             player.setHealthScale(20);
-            //фиксануть баг с сердцами через пакеты
             AttributeInstance instance = event.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED);
             if (instance != null) {
                 instance.setBaseValue(16);
@@ -118,14 +114,15 @@ public class Game implements Listener {
     public static void StartGame() {
         InLobby = false;
         Bukkit.getServer().setWhitelist(true);
+        //Запуск через 30 секунд
         Bukkit.getScheduler().runTaskLater(BattleRoyale.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 ShopInventory.put(player.getName(), Bukkit.createInventory(player, 54, "Магазин"));
                 Inventory inventory = ShopInventory.get(player.getName());
-                SetItems(inventory);
+                //SetItems(inventory);
                 player.getInventory().clear();
                 player.closeInventory();
-                arrowStart.addPassenger(player);
+                planeStart.addPassenger(player);
                 PlayerBalance.put(player.getName(), 0);
                 RoyalPlayerDeathEvent.PlayerHead.put(player.getName(), createHead(player.getName()));
                 ItemStack itemStack = CreateItem(Material.GOLD_INGOT, "&6Деньги", "&a" + 100, 0);
@@ -147,9 +144,15 @@ public class Game implements Listener {
             }
             GameStart = true;
             Bukkit.getServer().setWhitelist(false);
-            World w = Bukkit.getWorld("world");
+            World w = Bukkit.getWorld("battle");
+            //Генерация зоны
             GameZone = new Zone(BattleRoyale.getInstance());
-            GameZone.StartZone(w);
+            if (RoyaleAlivePlayers.AlivePlayerCounter() < 20) {
+                GameZone.StartZone(w);
+            }
+            else {
+                GameZone.StartTeamsZone(w);
+            }
             Bukkit.getScheduler().runTaskTimer(BattleRoyale.getInstance(), () -> {
                 if(!GameEnd) {
                     GameZone.SecProcessor();
@@ -157,6 +160,7 @@ public class Game implements Listener {
             }, 0 , 20);
         }, 600);
     }
+    //Конец игры
     public static void StopGame() {
         Team team = board.getTeam(PlayerTeamLoad.teams.get(0));
         for (String playerName : team.getEntries()) {
@@ -170,10 +174,11 @@ public class Game implements Listener {
             }
             TeamUnload.unload();
             Bukkit.getServer().setWhitelist(true);
-            deleteWorld("newworld", "battle");
+            deleteWorld("battle");
             Bukkit.getServer().reload();
                 }, 200);
     }
+    //Перегрузки метода CreateItem, который реализует создание предмета
     public static ItemStack CreateItem(Material material, String name, String lore, int data) {
         ItemStack itemStack = new ItemStack(material);
         ItemMeta meta = itemStack.getItemMeta();
@@ -200,7 +205,8 @@ public class Game implements Listener {
         itemStack.setItemMeta(meta);
         return  itemStack;
     }
-    public static void copyWorld(final String oldDirectory, final String newDirectory, final String name) {
+    //Копирование мира
+    public static void copyWorld(final String oldDirectory, final String name) {
         try {
             final File dest = new File("./");
             final File source = new File("./" + oldDirectory + "/");
@@ -211,8 +217,8 @@ public class Game implements Listener {
             e.printStackTrace();
         }
     }
-
-    public static void deleteWorld(final String directory, final String world) {
+    //Удаление старого мира
+    public static void deleteWorld(final String world) {
         BattleRoyale.getInstance().getServer().unloadWorld(world, true);
         final File dir = new File("./" + world);
         try {
@@ -222,6 +228,7 @@ public class Game implements Listener {
             ex.printStackTrace();
         }
     }
+
     public static ItemStack createHead(String name) {
         ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         SkullMeta meta = (SkullMeta) head.getItemMeta();
@@ -230,13 +237,14 @@ public class Game implements Listener {
 
         return head;
     }
-    public static void SetItems(Inventory inventory) {
+    //Генерация кастомных предметов
+    /*public static void SetItems(Inventory inventory) {
         inventory.setItem(20, qEpic.get(0));
         inventory.setItem(21, qEpic.get(1));
         inventory.setItem(22, qEpic.get(2));
         inventory.setItem(23, qEpic.get(3));
-    }
-
+    }*/
+    //Запретить дроп в лобби
     @EventHandler
     public void OnDropInLobby(PlayerDropItemEvent event) {
         if (!GameStart) {

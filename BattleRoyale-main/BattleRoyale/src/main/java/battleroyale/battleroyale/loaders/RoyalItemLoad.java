@@ -1,7 +1,6 @@
-package battleroyale.battleroyale;
+package battleroyale.battleroyale.loaders;
 
 import battleroyale.battleroyale.db.SqlManager;
-import battleroyale.battleroyale.items.RoyalItemManager;
 
 public class RoyalItemLoad {
     public RoyalItemLoad() {

@@ -4,6 +4,7 @@ import battleroyale.battleroyale.BattleRoyale;
 import battleroyale.battleroyale.GameLogic.Game;
 import org.bukkit.command.CommandSender;
 
+//Команды для начала игры
 public class GameStartCommand extends  AbstractCommand{
     public GameStartCommand() {
         super("br");

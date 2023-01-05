@@ -4,20 +4,22 @@ import battleroyale.battleroyale.BattleRoyale;
 import battleroyale.battleroyale.events.RoyalPlayerDeathEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RoyalPlayer extends RoyalDamageable{
-    Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
     private static List<String> players = new ArrayList<>();
 
+    private ItemStack MapItem;
+
+    public ItemStack getMap() {return MapItem;}
+
+    public void setMap(ItemStack is) {MapItem = is;}
 
     public static RoyalPlayer getPlayer(String name) {
         if (!players.contains(name)) {
@@ -37,12 +39,6 @@ public class RoyalPlayer extends RoyalDamageable{
             if (!players.contains(p.getName())) {
                 players.add(p.getName());
             }
-        }
-    }
-    public void setResistance(int value) {
-        Player p = this.getPlayer();
-        if (p != null) {
-            p.setMetadata("royal_resistance", new FixedMetadataValue(BattleRoyale.getInstance(), value));
         }
     }
     public void setArmor(int value) {
@@ -71,7 +67,7 @@ public class RoyalPlayer extends RoyalDamageable{
         Player p = this.getPlayer();
         if (killer != null) {
             if (killer instanceof RoyalPlayer) {
-                //начислить убийце монеты за килл и килл в стату....
+                //начислить в базу данных убийце монеты за килл и килл в стату....
             }
         }
         Bukkit.getPluginManager().callEvent(new RoyalPlayerDeathEvent(this, killer));
@@ -88,12 +84,6 @@ public class RoyalPlayer extends RoyalDamageable{
     public int getArmor() {
         Player p = this.getPlayer();
         return  p != null ? p.getMetadata("royal_armor").get(0).asInt() : -1;
-    }
-
-    @Override
-    public int getResistance() {
-        Player p = this.getPlayer();
-        return  p != null ? p.getMetadata("royal_resistance").get(0).asInt() : -1;
     }
 
     @Override
@@ -139,7 +129,7 @@ public class RoyalPlayer extends RoyalDamageable{
         super.health = health = Math.min(health, this.getMaxHealth());
         if (health <= 0) {
             this.setHealth(this.getMaxHealth());
-            this.kill((RoyalDamageable)null);
+            this.kill(null);
         } else if (p != null) {
             p.setMetadata("royal_health", new FixedMetadataValue(BattleRoyale.getInstance(), health));
             double d = 20.0 * (double)health / (double)this.getMaxHealth();
@@ -150,14 +140,8 @@ public class RoyalPlayer extends RoyalDamageable{
             p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(this.getMaxHealth());
         }
     }
-    private String locToString(String world, int x, int y, int z) {
-        return String.format("%s %d %d %d", world, x, y, z);
-    }
     public static boolean isAlive(Player p) {
         return p.getGameMode().equals(GameMode.ADVENTURE);
     }
 
-    private String locToString(Location l) {
-        return this.locToString(l.getWorld().getName(), l.getBlockX(), l.getBlockY(), l.getBlockZ());
-    }
 }

@@ -1,6 +1,5 @@
 package battleroyale.battleroyale.items;
 
-import battleroyale.battleroyale.utils.UtilChat;
 import battleroyale.battleroyale.utils.UtilColor;
 import com.google.common.collect.Lists;
 

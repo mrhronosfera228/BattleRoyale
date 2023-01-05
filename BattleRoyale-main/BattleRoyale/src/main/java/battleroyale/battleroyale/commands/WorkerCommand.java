@@ -15,6 +15,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+//Команда для записи координат сундука в базу данных
 public class WorkerCommand extends AbstractCommand implements Listener {
 
     public WorkerCommand() {

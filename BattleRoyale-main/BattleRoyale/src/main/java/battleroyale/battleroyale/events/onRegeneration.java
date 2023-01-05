@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 
+//Реализация кастомной регенерации
 public class onRegeneration implements Listener {
     public onRegeneration() {
     }
@@ -15,7 +16,6 @@ public class onRegeneration implements Listener {
         e.setCancelled(true);
         Entity ent = e.getEntity();
         if (ent instanceof Player) {
-            Player player = (Player) ent;
             RoyalPlayer rp = RoyalPlayer.getPlayer(ent.getName());
             if (rp.getHealth() + rp.getRegeneration() > rp.getMaxHealth()) {
                 rp.setHealth(rp.getMaxHealth());

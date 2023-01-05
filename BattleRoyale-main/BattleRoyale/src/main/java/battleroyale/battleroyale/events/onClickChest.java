@@ -31,7 +31,7 @@ public class onClickChest implements Listener {
                                 }, 300);
                         //удаление предмета с земли через 20 сек
                         Bukkit.getScheduler().runTaskLater(BattleRoyale.getInstance(), item::remove, 400);
-                        //добавление предмет в команду (чтобы поменять цвет свечения
+                        //добавление предмета в команду (чтобы поменять цвет свечения)
                         RoyalItem ri = RoyalItemManager.getItem(chest.getBlockInventory().getItem(i));
                         if (ri != null) {
                             switch (ri.getPrototype().getQuality()) {

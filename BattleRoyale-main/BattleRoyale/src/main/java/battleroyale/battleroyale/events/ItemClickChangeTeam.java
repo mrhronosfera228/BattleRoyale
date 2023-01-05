@@ -1,6 +1,6 @@
 package battleroyale.battleroyale.events;
 
-import battleroyale.battleroyale.InventoryLoad;
+import battleroyale.battleroyale.loaders.InventoryLoad;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -50,6 +50,7 @@ public class ItemClickChangeTeam implements Listener {
             }
         }
     }
+    //Реализация смены команд игроком
     public void ChangeTeam(InventoryClickEvent event, String teamName, String znak, int data, int slot) {
         if (event.getCurrentItem().equals(event.getInventory().getItem(slot))) {
             event.setCancelled(true);
@@ -78,6 +79,7 @@ public class ItemClickChangeTeam implements Listener {
             PlayerData.put(player.getName(), data);
         }
     }
+    //Подпись ника игрока под блоком шерсти
     public static List<String> loreUpdate(String teamName, String znak) {
         Team team = board.getTeam(teamName);
         List<String> lore = new ArrayList<>();
@@ -88,6 +90,7 @@ public class ItemClickChangeTeam implements Listener {
         }
         return lore;
     }
+
     public void UpdateItemChange(InventoryClickEvent event,  String teamName, String znak, int data, int slot) {
         ItemStack teams = CreateItem(Material.WOOL, znak + teamName, loreUpdate(teamName, znak), data);
         event.getInventory().setItem(slot, teams);

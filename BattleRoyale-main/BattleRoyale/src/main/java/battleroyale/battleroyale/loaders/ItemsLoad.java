@@ -1,10 +1,9 @@
-package battleroyale.battleroyale;
+package battleroyale.battleroyale.loaders;
 
 import battleroyale.battleroyale.db.Callback;
 import battleroyale.battleroyale.db.SqlManager;
 import battleroyale.battleroyale.items.RoyalItemManager;
 import battleroyale.battleroyale.items.RoyalItemPrototype;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;

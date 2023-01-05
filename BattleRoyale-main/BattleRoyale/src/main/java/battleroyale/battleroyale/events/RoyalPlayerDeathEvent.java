@@ -2,7 +2,7 @@ package battleroyale.battleroyale.events;
 
 import battleroyale.battleroyale.BattleRoyale;
 import battleroyale.battleroyale.GameLogic.Game;
-import battleroyale.battleroyale.PlayerTeamLoad;
+import battleroyale.battleroyale.loaders.PlayerTeamLoad;
 import battleroyale.battleroyale.player.RoyalDamageable;
 import battleroyale.battleroyale.player.RoyalPlayer;
 import battleroyale.battleroyale.utils.UtilColor;
@@ -15,7 +15,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -38,9 +37,13 @@ public class RoyalPlayerDeathEvent extends Event {
         this.killer = killer;
         Death();
     }
+
+    //Реализация смерти игрока
     public void Death() {
         Player player1 = player.getPlayer();
+        //Игрока переносит в наблюдателя
         player1.setGameMode(GameMode.SPECTATOR);
+        //После смерти на координатах игрока спавнится арморстенд голова (на 20 секунд)
         ArmorStand armorStand = player1.getWorld().spawn(player1.getLocation(), ArmorStand.class);
         armorStand.setVisible(false);
         armorStand.setSmall(true);
@@ -53,11 +56,13 @@ public class RoyalPlayerDeathEvent extends Event {
             armorStandInventoryMap.remove(armorStand);
         }, 400);
         Inventory inventory = Bukkit.createInventory(null, 54, "noob");
+        //Деньги за убийство игрока
         inventory.setItem(0, CreateItem(Material.GOLD_INGOT, "&6Деньги", "&a" + Game.PlayerBalance.get(player1.getName()), 0));
         for (int i = 0; i < player1.getInventory().getSize(); i++) {
             AddItem(player1.getInventory().getItem(i), inventory);
         }
         armorStandInventoryMap.put(armorStand, inventory);
+        //Обновляет статы игроку
         player.setArmor(0);
         player.setMaxHealth(20);
         player.setHealth(20);
@@ -67,6 +72,7 @@ public class RoyalPlayerDeathEvent extends Event {
         player1.getInventory().clear();
         player1.setFoodLevel(20);
         Team team = board.getEntryTeam(player1.getName());
+        //Если игрок в скваде, то перенести в спектаторы и в своего тиммейта
         for (String playerName : team.getEntries()) {
             Player teamPlayer = Bukkit.getPlayer(playerName);
             if (!teamPlayer.getName().equals(player1.getName()) && RoyalPlayer.isAlive(teamPlayer)) {
@@ -74,6 +80,7 @@ public class RoyalPlayerDeathEvent extends Event {
             }
         }
         int countAlive = 0;
+        //Реализация выкупа тиммейта в магазине
         for (String playerName : team.getEntries()) {
             Player teamPlayer = Bukkit.getPlayer(playerName);
             if (!teamPlayer.getName().equals(player1.getName())) {
@@ -84,8 +91,9 @@ public class RoyalPlayerDeathEvent extends Event {
                 Game.ShopInventory.get(teamPlayer.getName()).addItem(CreateItem(PlayerHead.get(player1.getName()), "&c" + player1.getName(), "Вы можете купить вашего союзника за &6{sum}", 3));
             }
         }
+
         if (countAlive == 0) {
-            PlayerTeamLoad.teams.remove(team.getName());
+            PlayerTeamLoad.teams.remove(team.getName()); //Если весь сквад вымер, удаляем.
             if (PlayerTeamLoad.teams.size() == 1) {
                 StopGame();
             }

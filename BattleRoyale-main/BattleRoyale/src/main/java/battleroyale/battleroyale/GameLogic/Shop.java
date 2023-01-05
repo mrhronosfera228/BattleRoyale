@@ -18,6 +18,7 @@ import org.bukkit.scoreboard.Team;
 
 public class Shop implements Listener {
     Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+    //Открыть магазин
     @EventHandler
     public void onOpenShop(PlayerInteractEvent event) {
         if (Game.GameStart) {
@@ -27,6 +28,7 @@ public class Shop implements Listener {
             }
         }
     }
+    //Реализация покупки в магазине
     @EventHandler
     public void  onShopClicked(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -48,7 +50,8 @@ public class Shop implements Listener {
                         purchasedPlayer.setGameMode(GameMode.ADVENTURE);
                         purchasedPlayer.teleport(player.getLocation());
                         BattleRoyale.sendMessage(player, "&aВы успешно выкупили своего союзника.");
-                    } else {
+                    }
+                    else {
                         BattleRoyale.sendMessage(player, "&cДанный игрок вышел");
                         event.getInventory().remove(event.getCurrentItem());
                     }

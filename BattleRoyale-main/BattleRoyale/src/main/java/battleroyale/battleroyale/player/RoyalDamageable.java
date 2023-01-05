@@ -2,14 +2,13 @@ package battleroyale.battleroyale.player;
 
 import battleroyale.battleroyale.BattleRoyale;
 import org.bukkit.EntityEffect;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public abstract class RoyalDamageable {
     protected int health;
     protected int max_health;
-    protected boolean killed = false;
+
     protected Player player;
     protected RoyalDamageable(Player player) {
         this.player = player;
@@ -34,7 +33,7 @@ public abstract class RoyalDamageable {
         Player player1 = this.getPlayer();
         this.health = health = Math.min(health, this.getMax_health());
         if (health <= 0) {
-            this.kill((RoyalDamageable)null);
+            this.kill(null);
         } else if (player1 != null && player1.hasMetadata("royal_health")) {
             player1.setMetadata("royal_health", new FixedMetadataValue(BattleRoyale.getInstance(), health));
 
@@ -53,8 +52,6 @@ public abstract class RoyalDamageable {
         return player;
     }
     public abstract int getArmor();
-
-    public abstract int getResistance();
 
     public abstract int getMagicArmor();
 }

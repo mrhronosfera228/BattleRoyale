@@ -1,16 +1,13 @@
 package battleroyale.battleroyale;
 
 import battleroyale.battleroyale.GameLogic.Game;
-import battleroyale.battleroyale.GameLogic.Shop;
-import battleroyale.battleroyale.GameLogic.Spectator;
-import battleroyale.battleroyale.cars.SpawnArrow;
+import battleroyale.battleroyale.loaders.PlaneLoad;
 import battleroyale.battleroyale.commands.GameStartCommand;
 import battleroyale.battleroyale.commands.ItemCommand;
 import battleroyale.battleroyale.commands.WorkerCommand;
-import battleroyale.battleroyale.db.ConnectionPool;
 import battleroyale.battleroyale.db.SqlManager;
-import battleroyale.battleroyale.events.*;
 import battleroyale.battleroyale.items.RoyalItemManager;
+import battleroyale.battleroyale.loaders.*;
 import battleroyale.battleroyale.utils.UtilChat;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -25,32 +22,20 @@ public final class BattleRoyale extends JavaPlugin {
         Bukkit.getServer().setWhitelist(true);
         instance = this;
         sql = new SqlManager(this);
-        Game.copyWorld("oldworld", "newworld", "battle");
+        Game.copyWorld("oldworld",  "battle");
         RoyalItemLoad.load(sql);
         RoyalItemManager.initialize();
         TeamLoad.load();
         InventoryLoad.load();
         PlayerTeamLoad.load();
-        SquadsLoad.load();
         ChestLoad.load();
-        SpawnArrow.load();
+        PlaneLoad.load();
         Bukkit.getScheduler().runTaskLater(this, ItemsLoad::load, 100);
         Bukkit.getScheduler().runTaskLater(this, ChestLoadDrop::load, 200);
         new ItemCommand();
         new GameStartCommand();
         new WorkerCommand();
-        getServer().getPluginManager().registerEvents(new onDropTake(), this);
-        getServer().getPluginManager().registerEvents(new Game(), this);
-        getServer().getPluginManager().registerEvents(new onPickUpItem(), this);
-        getServer().getPluginManager().registerEvents(new onClickChest(), this);
-        getServer().getPluginManager().registerEvents(new onPlayerDamage(), this);
-        getServer().getPluginManager().registerEvents(new onRegeneration(), this);
-        getServer().getPluginManager().registerEvents(new onPlayerGetDamage(), this);
-        getServer().getPluginManager().registerEvents(new onClicked(), this);
-        getServer().getPluginManager().registerEvents(new ItemClickChangeTeam(), this);
-        getServer().getPluginManager().registerEvents(new Shop(), this);
-        getServer().getPluginManager().registerEvents(new Spectator(), this);
-        getServer().getPluginManager().registerEvents(new WorkerCommand(), this);
+        EventsLoader.load();
         Bukkit.getServer().setWhitelist(false);
     }
 

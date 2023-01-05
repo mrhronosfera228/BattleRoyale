@@ -2,7 +2,6 @@ package battleroyale.battleroyale.db;
 
 import battleroyale.battleroyale.BattleRoyale;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
 

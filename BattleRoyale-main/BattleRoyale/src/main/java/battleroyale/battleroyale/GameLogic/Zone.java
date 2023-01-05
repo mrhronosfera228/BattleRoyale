@@ -31,7 +31,7 @@ public class Zone {
     private int airDropMin;
     private int airDropMax;
     public static HashMap<Integer, Player> players = new HashMap();
-
+    //Инициализация стартовой зоны для соло игры
     public void StartZone(World world) {
         flag = true;
         frequency = 20;
@@ -55,6 +55,31 @@ public class Zone {
         Bukkit.broadcastMessage("=-=-=-=-=-=-=-=-=-=");
         Bukkit.broadcastMessage("§cЦентр зоны : \n x = 0\n z = 0");
     }
+    //Инициализация стартовой зоны для игры в командах
+    public void StartTeamsZone(World world) {
+        flag = true;
+        frequency = 20;
+        w = world;
+        timer = 360 * 20;
+        zoneSize = 4500;
+        zoneTimer = 360 * 20;
+        zoneShrinkTimer = 240 * 20;
+        worldBorder = w.getWorldBorder();
+        worldBorder.setSize(zoneSize);
+        worldBorder.setCenter(0, 0);
+        nextZoneSizeMultiplier = 0.5F;
+        waitMultiplier = 60 * 20;
+        zoneDamageMultiplier = 1.4F;
+        airDropTimer = 250 * 20;
+        airDropMin = 100 * 20;
+        airDropMax = 200 * 20;
+        endZoneSize = 100;
+        Bukkit.broadcastMessage("=-=-=-=-=-=-=-=-=-=");
+        Bukkit.broadcastMessage("Размер зоны установлен: " + zoneSize);
+        Bukkit.broadcastMessage("=-=-=-=-=-=-=-=-=-=");
+        Bukkit.broadcastMessage("§cЦентр зоны : \n x = 0\n z = 0");
+    }
+
 
     public void SecProcessor() {
         if (flag) {
@@ -91,13 +116,14 @@ public class Zone {
                     timer = timer - waitMultiplier;
                     zoneTimer = timer;
                     zoneShrinkTimer = timer / 3;
+                    /*Пока думаю над реализацией
                     Player player = RoyaleAlivePlayers.GetRandomPlayer();
                     Location location = player.getLocation();
-                    worldBorder.setCenter(location.getBlockX(), location.getBlockZ());
+                    worldBorder.setCenter(location.getBlockX(), location.getBlockZ());*/
                     Bukkit.broadcastMessage("=-=-=-=-=-=-=-=-=-=");
                     Bukkit.broadcastMessage("Размер зоны установлен: " + zoneSize);
                     Bukkit.broadcastMessage("=-=-=-=-=-=-=-=-=-=");
-                    Bukkit.broadcastMessage("§cЦентр зоны : \n x = " + location.getBlockX() + "\n z = " + location.getBlockZ());
+                    //Bukkit.broadcastMessage("§cЦентр зоны : \n x = " + location.getBlockX() + "\n z = " + location.getBlockZ());
                     Bukkit.broadcastMessage("До начала сужения следующей зоны осталось - " + zoneTimer / 20 + " секунд");
                     zoneTimer -= frequency;
                     Bukkit.broadcastMessage("=-=-=-=-=-=-=-=-=-=");

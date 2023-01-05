@@ -1,4 +1,4 @@
-package battleroyale.battleroyale;
+package battleroyale.battleroyale.loaders;
 
 import battleroyale.battleroyale.utils.UtilColor;
 import org.bukkit.Bukkit;

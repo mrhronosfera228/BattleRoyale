@@ -16,15 +16,12 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Random;
 
 public class onClicked implements Listener {
-    public static final HashMap<String, Long> anticlicker = new HashMap();
-    private static final Random r = new Random();
 
     public onClicked() {
     }
+    // Надевание брони на пкм даёт статы игроку
     @EventHandler
     public void onPlayerClicked(PlayerInteractEvent event) {
         if (event.getItem() != null) {
@@ -58,6 +55,7 @@ public class onClicked implements Listener {
         }
     }
 
+    //Надевание брони через пкм даёт статы
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
@@ -96,7 +94,6 @@ public class onClicked implements Listener {
                     rp.setMagicArmor(marmor);
                     rp.setRegeneration(regeneration);
                 }, 2L);
-                anticlicker.put(p.getName(), System.currentTimeMillis());
         } catch (Exception var12) {
             System.out.println("OIC EXCEPTION CAUSER: " + p.getName());
             if (!p.isOp()) {
@@ -107,6 +104,7 @@ public class onClicked implements Listener {
             }
         }
     }
+
     public static boolean isArmor(ItemStack is) {
         return isHelmet(is) || isChestplate(is) || isLeggings(is) || isBoots(is);
     }

@@ -1,4 +1,4 @@
-package battleroyale.battleroyale;
+package battleroyale.battleroyale.loaders;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.Scoreboard;

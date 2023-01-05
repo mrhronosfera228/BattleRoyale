@@ -6,7 +6,6 @@ import battleroyale.battleroyale.items.RoyalItemManager;
 import battleroyale.battleroyale.items.RoyalWeapon;
 import battleroyale.battleroyale.player.RoyalDamageable;
 import battleroyale.battleroyale.player.RoyalPlayer;
-import battleroyale.battleroyale.player.Squad;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -23,10 +22,11 @@ import java.util.Random;
 public class onPlayerDamage implements Listener {
     private static Random random = new Random();
     Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-    protected static final long player_attack_speed = 260L;
     public static final HashMap<String, Long> attackTime = new HashMap<>();
-    public onPlayerDamage (){
-    }
+
+    public onPlayerDamage (){}
+
+    //Реализация кастомного урона
     @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
         event.setCancelled(true);
@@ -101,6 +101,8 @@ public class onPlayerDamage implements Listener {
             }
         }
     }
+
+    //Реализация перерыва на получение урона
     public static boolean checkCanAttack(Player p, boolean bow) {
         String name = p.getName();
         Long current = System.currentTimeMillis();
@@ -118,6 +120,7 @@ public class onPlayerDamage implements Listener {
         }
     }
 
+    //Финальный урон после вычета статов брони
     public static int getFinalDamage(RoyalPlayer damager, RoyalItem item, RoyalDamageable victim) {
         if (item instanceof RoyalWeapon) {
             RoyalWeapon weapon = (RoyalWeapon) item;
@@ -127,6 +130,7 @@ public class onPlayerDamage implements Listener {
         }
     }
 
+    //Реализация расчёта урона, учитывая статы
     public static int getFinalDamage(RoyalPlayer damager, int physical, int magical, int criticalChance, int criticalSrength, RoyalDamageable victim) {
 
         float pure = (float)(physical + magical);

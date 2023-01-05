@@ -1,11 +1,11 @@
-package battleroyale.battleroyale;
+package battleroyale.battleroyale.loaders;
+import battleroyale.battleroyale.BattleRoyale;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class ChestLoadDrop {

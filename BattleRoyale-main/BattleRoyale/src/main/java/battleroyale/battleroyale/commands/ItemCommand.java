@@ -5,6 +5,7 @@ import battleroyale.battleroyale.items.RoyalItemManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+//Команды для получения кастомных предметов
 public class ItemCommand extends AbstractCommand {
     public ItemCommand() {
         super("item");

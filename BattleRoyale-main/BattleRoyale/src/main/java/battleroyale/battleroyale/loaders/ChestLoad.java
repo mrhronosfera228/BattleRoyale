@@ -1,4 +1,4 @@
-package battleroyale.battleroyale;
+package battleroyale.battleroyale.loaders;
 
 import battleroyale.battleroyale.db.Callback;
 import battleroyale.battleroyale.db.SqlManager;

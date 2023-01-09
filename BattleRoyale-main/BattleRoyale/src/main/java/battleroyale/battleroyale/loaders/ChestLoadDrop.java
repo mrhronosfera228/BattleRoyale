@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Random;
 
 public class ChestLoadDrop {
-    private static final Random random = new Random();
+    private static Random random = new Random();
     public static void load() {
-        toLoad(ChestLoad.common, "common");
-        toLoad(ChestLoad.rare, "rare");
-        toLoad(ChestLoad.epic, "epic");
-        toLoad(ChestLoad.legendary, "legendary");
+        toLoad(ChestLoad.getCommon(), "common");
+        toLoad(ChestLoad.getRare(), "rare");
+        toLoad(ChestLoad.getEpic(), "epic");
+        toLoad(ChestLoad.getLegendary(), "legendary");
     }
-    public static void toLoad(List<Location> map, String name) {
+    private static void toLoad(List<Location> map, String name) {
         for (int i = 0; i < map.size(); i++) {
             Location location = map.get(i);
             if (!location.getBlock().getType().equals(Material.CHEST)) {
@@ -27,27 +27,27 @@ public class ChestLoadDrop {
                 Chest chest = (Chest) location.getBlock().getState();
                 switch (name) {
                     case "common":
-                        if (ItemsLoad.qCommon.size() != 0) {
-                            chest.getBlockInventory().addItem(ItemsLoad.qCommon.get(random.nextInt(ItemsLoad.qCommon.size())));
-                            System.out.println(ItemsLoad.qCommon.size());
+                        if (ItemsLoad.getqCommon().size() != 0) {
+                            chest.getBlockInventory().addItem(ItemsLoad.getqCommon().get(random.nextInt(ItemsLoad.getqCommon().size())));
+                            System.out.println(ItemsLoad.getqCommon().size());
                         }
                         break;
                     case "rare":
-                        if (ItemsLoad.qRare.size() != 0) {
-                            chest.getBlockInventory().addItem(ItemsLoad.qRare.get(random.nextInt(ItemsLoad.qRare.size())));
-                            System.out.println(ItemsLoad.qRare.size());
+                        if (ItemsLoad.getqRare().size() != 0) {
+                            chest.getBlockInventory().addItem(ItemsLoad.getqRare().get(random.nextInt(ItemsLoad.getqRare().size())));
+                            System.out.println(ItemsLoad.getqRare().size());
                         }
                         break;
                     case "epic":
-                        if (ItemsLoad.qEpic.size() != 0) {
-                            chest.getBlockInventory().addItem(ItemsLoad.qEpic.get(random.nextInt(ItemsLoad.qEpic.size())));
-                            System.out.println(ItemsLoad.qEpic.size());
+                        if (ItemsLoad.getqEpic().size() != 0) {
+                            chest.getBlockInventory().addItem(ItemsLoad.getqEpic().get(random.nextInt(ItemsLoad.getqEpic().size())));
+                            System.out.println(ItemsLoad.getqEpic().size());
                         }
                         break;
                     case "legendary":
-                        if (ItemsLoad.qLegendary.size() != 0) {
-                            chest.getBlockInventory().addItem(ItemsLoad.qLegendary.get(random.nextInt(ItemsLoad.qLegendary.size())));
-                            System.out.println(ItemsLoad.qLegendary.size());
+                        if (ItemsLoad.getqLegendary().size() != 0) {
+                            chest.getBlockInventory().addItem(ItemsLoad.getqLegendary().get(random.nextInt(ItemsLoad.getqLegendary().size())));
+                            System.out.println(ItemsLoad.getqLegendary().size());
                         }
                         break;
                 }

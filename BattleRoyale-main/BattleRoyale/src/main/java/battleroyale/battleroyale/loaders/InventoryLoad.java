@@ -16,10 +16,10 @@ public class InventoryLoad {
         changeInventory(TeamChangeInventory, CreateItem(Material.WOOL, "&dРозовые", "&fИгроков: 0/2", 6), 0);
         changeInventory(TeamChangeInventory, CreateItem(Material.WOOL, "&9Синие", "&fИгроков: 0/2", 11), 1);
     }
-    public static Inventory createInventory(String name) {
+    private static Inventory createInventory(String name) {
         return Bukkit.createInventory(null, 18, name);
     }
-    public static void changeInventory(Inventory inventory, ItemStack item, int slot) {
+    private static void changeInventory(Inventory inventory, ItemStack item, int slot) {
         inventory.setItem(slot, item);
     }
 

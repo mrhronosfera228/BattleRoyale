@@ -8,9 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class onPlayerGetDamage implements Listener {
-    public onPlayerGetDamage() {}
-
-    //Убрали дефолтный урон от всего, кроме падения и огня
+    public onPlayerGetDamage() {
+    }
     @EventHandler
     public void onPlayerGetDamage(EntityDamageEvent event) {
         event.setCancelled(true);
@@ -19,7 +18,7 @@ public class onPlayerGetDamage implements Listener {
                 Player player = (Player) event.getEntity();
                 RoyalPlayer rp = RoyalPlayer.getPlayer(player.getName());
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
-                    rp.damage(null, (int) event.getDamage());
+                    rp.damage(null, (int) event.getDamage(), 0, "%s");
                 }
             }
         }

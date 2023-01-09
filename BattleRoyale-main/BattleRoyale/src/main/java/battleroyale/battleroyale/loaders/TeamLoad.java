@@ -20,7 +20,7 @@ public class TeamLoad {
         createTeam(board,"MIFIC", "&c", 'c');
         createTeam(board,"ARTIFACT", "&4", '4');
     }
-    public static void createTeam(Scoreboard board, String teams, String color, char colors) {
+    private static void createTeam(Scoreboard board, String teams, String color, char colors) {
         if (board.getTeam(teams) == null) {
             board.registerNewTeam(teams);
             Team team = board.getTeam(teams);

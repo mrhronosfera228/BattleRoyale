@@ -48,6 +48,9 @@ public class onPlayerDamage implements Listener {
                             pj.remove();
                         }
                     }
+                    if (event.getEntity() instanceof  ArmorStand) {
+                        return;
+                    }
                     if (!(event.getEntity() instanceof Player) && !event.getEntity().hasMetadata("royal_mob") && !(event.getEntity() instanceof ArmorStand)) {
                         event.getEntity().remove();
                     }
@@ -93,7 +96,7 @@ public class onPlayerDamage implements Listener {
                         damager.sendMessage("" + tar.getHealth());
                         Vector vector = new Vector(damager.getLocation().getDirection().getX() / 2,  0.35, damager.getLocation().getDirection().getZ() / 2);
                         target.setVelocity(vector);
-                        tar.damage(damagere, getFinalDamage(dam, item, tar));
+                        getFinalDamage(dam, item, tar);
                     }
                 }
             } catch (IllegalStateException var18) {
@@ -101,8 +104,6 @@ public class onPlayerDamage implements Listener {
             }
         }
     }
-
-    //Реализация перерыва на получение урона
     public static boolean checkCanAttack(Player p, boolean bow) {
         String name = p.getName();
         Long current = System.currentTimeMillis();
@@ -120,28 +121,27 @@ public class onPlayerDamage implements Listener {
         }
     }
 
-    //Финальный урон после вычета статов брони
-    public static int getFinalDamage(RoyalPlayer damager, RoyalItem item, RoyalDamageable victim) {
+    public static void getFinalDamage(RoyalPlayer damager, RoyalItem item, RoyalDamageable victim) {
         if (item instanceof RoyalWeapon) {
             RoyalWeapon weapon = (RoyalWeapon) item;
-            return getFinalDamage(damager, weapon.getPhysicalDamage(), weapon.getMagicalDamage(), weapon.getCriticalChance(), weapon.getCriticalStrength(), victim);
+            getFinalDamage(damager, weapon.getPhysicalDamage(), weapon.getMagicalDamage(), weapon.getCriticalChance(), weapon.getCriticalStrength(), victim);
         } else {
-            return getFinalDamage(damager, random.nextInt(2) + 1, 0, 0, 0, victim);
+            getFinalDamage(damager, random.nextInt(2) + 1, 0, 0, 0, victim);
         }
     }
 
-    //Реализация расчёта урона, учитывая статы
-    public static int getFinalDamage(RoyalPlayer damager, int physical, int magical, int criticalChance, int criticalSrength, RoyalDamageable victim) {
-
-        float pure = (float)(physical + magical);
+    public static void getFinalDamage(RoyalPlayer damager, int physical, int magical, int criticalChance, int criticalSrength, RoyalDamageable victim) {
         int armorReductor = 100;
         physical = (int)((float)physical * (1.0F - 0.75F * Math.min(1.0F, (float)victim.getArmor() / (float)armorReductor)));
         magical = (int)((float)magical * (1.0F - 0.75F * Math.min(1.0F, (float)victim.getMagicArmor() / (float)armorReductor)));
-        float total = (float)(physical + magical);
         if (random.nextInt(100) < criticalChance) {
-            total += (int)(total * ((float)criticalSrength / 100));
+            physical += (int)(physical * ((float)criticalSrength / 100));
+            magical += (int)(magical * ((float)criticalSrength / 100));
         }
-
-        return (int)(total < 1.0F ? 1.0F : total);
+        if (magical != 0) {
+            victim.damage(damager, (int)(Math.max(physical, 1.0F)), (int)(Math.max(magical, 1.0F)), "%s");
+        } else {
+            victim.damage(damager, (int)(Math.max(physical, 1.0F)), 0, "%s");
+        }
     }
 }

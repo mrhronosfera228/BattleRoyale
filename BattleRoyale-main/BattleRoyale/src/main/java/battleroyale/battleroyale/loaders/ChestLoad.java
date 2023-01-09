@@ -11,17 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChestLoad {
-    public static List<Location> common = new ArrayList<>();
-    public static List<Location> rare = new ArrayList<>();
-    public static List<Location> epic = new ArrayList<>();
-    public static List<Location> legendary = new ArrayList<>();
+    private static List<Location> common = new ArrayList<>();
+    private static List<Location> rare = new ArrayList<>();
+    private static List<Location> epic = new ArrayList<>();
+    private static List<Location> legendary = new ArrayList<>();
     public static void load() {
         toLoad("chest_common", common);
         toLoad("chest_rare", rare);
         toLoad("chest_epic", epic);
         toLoad("chest_legendary", legendary);
     }
-    public static void toLoad(String tableName, List<Location> map) {
+    private static void toLoad(String tableName, List<Location> map) {
         SqlManager.findAsync("SELECT * FROM " + tableName, new Callback() {
             @Override
             public void onQueryDone(ResultSet result) {
@@ -41,5 +41,21 @@ public class ChestLoad {
                 }
             }
         });
+    }
+
+    public static List<Location> getCommon() {
+        return common;
+    }
+
+    public static List<Location> getEpic() {
+        return epic;
+    }
+
+    public static List<Location> getLegendary() {
+        return legendary;
+    }
+
+    public static List<Location> getRare() {
+        return rare;
     }
 }

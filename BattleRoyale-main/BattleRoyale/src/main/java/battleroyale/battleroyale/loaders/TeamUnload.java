@@ -10,7 +10,7 @@ public class TeamUnload {
         unloadTeam(board, "Синие");
         unloadTeam(board, "Розовые");
     }
-    public static void unloadTeam(Scoreboard board, String teamName) {
+    private static void unloadTeam(Scoreboard board, String teamName) {
         if (board.getTeam(teamName) != null) {
             Team team = board.getTeam(teamName);
             for (String playerName : team.getEntries()) {

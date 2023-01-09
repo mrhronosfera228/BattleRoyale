@@ -17,7 +17,7 @@ public class PlayerTeamLoad {
         createTeam(board, "Синие", "&9");
         teams.add("Синие");
     }
-    public static void createTeam(Scoreboard board, String teams, String color) {
+    private static void createTeam(Scoreboard board, String teams, String color) {
         if (board.getTeam(teams) == null) {
             board.registerNewTeam(teams);
             Team team = board.getTeam(teams);

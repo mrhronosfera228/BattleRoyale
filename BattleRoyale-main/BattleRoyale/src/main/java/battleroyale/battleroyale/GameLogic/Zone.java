@@ -15,11 +15,9 @@ public class Zone {
     private int endZoneSize;
     private boolean flag;
     private int timer;
-
     public Zone(BattleRoyale p) {
         plugin = p;
     }
-
     private float zoneSize;
     private int frequency;
     private int zoneTimer; //Основной таймер зоны
@@ -27,10 +25,13 @@ public class Zone {
     private float nextZoneSizeMultiplier;
     private int waitMultiplier;
     private float zoneDamageMultiplier;
-    private int airDropTimer;
-    private int airDropMin;
-    private int airDropMax;
-    public static HashMap<Integer, Player> players = new HashMap();
+
+    //Дальнейшая реализация
+
+    //private int airDropTimer;
+    //private int airDropMin;
+    //private int airDropMax;
+    //public static HashMap<Integer, Player> players = new HashMap();
     //Инициализация стартовой зоны для соло игры
     public void StartZone(World world) {
         flag = true;
@@ -46,9 +47,10 @@ public class Zone {
         nextZoneSizeMultiplier = 0.5F;
         waitMultiplier = 30 * 20;
         zoneDamageMultiplier = 1.4F;
-        airDropTimer = 250 * 20;
-        airDropMin = 100 * 20;
-        airDropMax = 200 * 20;
+        //Дальнейшая реализация
+        //airDropTimer = 250 * 20;
+        //airDropMin = 100 * 20;
+        //airDropMax = 200 * 20;
         endZoneSize = 50;
         Bukkit.broadcastMessage("=-=-=-=-=-=-=-=-=-=");
         Bukkit.broadcastMessage("Размер зоны установлен: " + zoneSize);
@@ -70,9 +72,10 @@ public class Zone {
         nextZoneSizeMultiplier = 0.5F;
         waitMultiplier = 60 * 20;
         zoneDamageMultiplier = 1.4F;
-        airDropTimer = 250 * 20;
-        airDropMin = 100 * 20;
-        airDropMax = 200 * 20;
+        //Дальнейшая реализация
+        //airDropTimer = 250 * 20;
+        //airDropMin = 100 * 20;
+        //airDropMax = 200 * 20;
         endZoneSize = 100;
         Bukkit.broadcastMessage("=-=-=-=-=-=-=-=-=-=");
         Bukkit.broadcastMessage("Размер зоны установлен: " + zoneSize);
@@ -139,7 +142,7 @@ public class Zone {
             for(Player player : Bukkit.getServer().getOnlinePlayers()){
                 if (player.getGameMode() == GameMode.ADVENTURE && RoyalPlayer.getPlayer(player.getName()).getHealth() > 0) {
                     if(!worldBorder.isInside(player.getLocation())){
-                        RoyalPlayer.getPlayer(player.getName()).damage(null,  RoyalPlayer.getPlayer(player.getName()).getMaxHealth()/(int)((20 * 1.4 / zoneDamageMultiplier)));
+                        RoyalPlayer.getPlayer(player.getName()).damage(null,  RoyalPlayer.getPlayer(player.getName()).getMaxHealth()/(int)((20 * 1.4 / zoneDamageMultiplier)), 0, "%s");
                     }
                 }
             }

@@ -31,86 +31,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static battleroyale.battleroyale.loaders.ItemsLoad.qEpic;
-import static battleroyale.battleroyale.loaders.PlaneLoad.planeStart;
+import static battleroyale.battleroyale.loaders.PlaneLoad.getPlaneStart;
 
-public class Game implements Listener {
+public class Game {
     public static boolean GameStart = false;
     private static  Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
     public static boolean GameEnd = false;
     public static boolean InLobby = true;
     public static Map<String, Integer> PlayerBalance = new HashMap<>();
     public static Map<String, Inventory> ShopInventory = new HashMap<>();
-    public static Zone GameZone;
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        player.getInventory().clear();
-        player.setFoodLevel(20);
-        if (InLobby) {
-            if (Bukkit.getServer().getOnlinePlayers().size() >= 2) {
-                StartGame();
-            }
-        }
-        //Start
-        if (!GameStart) {
-            player.setGameMode(GameMode.ADVENTURE);
-            player.getInventory().addItem(CreateItem(Material.WOOL, "&6Выбор команды", "", 0));
-            player.teleport(new Location(Bukkit.getWorld("battle"), 48, 18, 79));
-            player.setHealthScale(20);
-            AttributeInstance instance = event.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED);
-            if (instance != null) {
-                instance.setBaseValue(16);
-            }
-            RoyalPlayer rp = RoyalPlayer.getPlayer(player.getName());
-            rp.setMaxHealth(20);
-            rp.setRegeneration(1);
-            rp.setHealth(20);
-            rp.setMagicArmor(0);
-            rp.setArmor(0);
-        }
-    }
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-            Team team = board.getEntryTeam(player.getName());
-            if (team != null) {
-                if (!GameStart) {
-                    team.removeEntry(player.getName());
-                    if (ItemClickChangeTeam.PlayerSlot.get(player.getName()) != null && ItemClickChangeTeam.PlayerZnak.get(player.getName()) != null && ItemClickChangeTeam.PlayerTeam.get(player.getName()) != null) {
-                        ItemStack item = InventoryLoad.getTeamChangeInventory().getItem(ItemClickChangeTeam.PlayerSlot.get(player.getName()));
-                        ItemMeta meta = item.getItemMeta();
-                        meta.setLore(UtilColor.toColor(ItemClickChangeTeam.loreUpdate(ItemClickChangeTeam.PlayerTeam.get(player.getName()), ItemClickChangeTeam.PlayerZnak.get(player.getName()))));
-                        item.setItemMeta(meta);
-                        InventoryLoad.getTeamChangeInventory().setItem(ItemClickChangeTeam.PlayerSlot.get(player.getName()), item);
-                    }
-                } else {
-                    team.removeEntry(player.getName());
-                    int countAlive = 0;
-                    for (String playerName : team.getEntries()) {
-                        Player teamPlayer = Bukkit.getPlayer(playerName);
-                        if (!teamPlayer.getName().equals(player.getName())) {
-                            if (RoyalPlayer.isAlive(teamPlayer)) {
-                                countAlive++;
-                            }
-                        }
-                    }
-                    if (countAlive == 0) {
-                        PlayerTeamLoad.teams.remove(team.getName());
-                        if (PlayerTeamLoad.teams.size() == 1) {
-                            StopGame();
-                        }
-                    }
-                }
-            }
-
-    }
-    @EventHandler
-    public void onHunger(FoodLevelChangeEvent event) {
-        if (!GameStart) {
-            event.setCancelled(true);
-        }
-    }
+    private static Zone GameZone;
     public static void StartGame() {
         InLobby = false;
         Bukkit.getServer().setWhitelist(true);
@@ -122,7 +52,7 @@ public class Game implements Listener {
                 //SetItems(inventory);
                 player.getInventory().clear();
                 player.closeInventory();
-                planeStart.addPassenger(player);
+                getPlaneStart().addPassenger(player);
                 PlayerBalance.put(player.getName(), 0);
                 RoyalPlayerDeathEvent.PlayerHead.put(player.getName(), createHead(player.getName()));
                 ItemStack itemStack = CreateItem(Material.GOLD_INGOT, "&6Деньги", "&a" + 100, 0);
@@ -237,19 +167,12 @@ public class Game implements Listener {
 
         return head;
     }
-    //Генерация кастомных предметов
+    //Генерация кастомных предметов в магазине
     /*public static void SetItems(Inventory inventory) {
         inventory.setItem(20, qEpic.get(0));
         inventory.setItem(21, qEpic.get(1));
         inventory.setItem(22, qEpic.get(2));
         inventory.setItem(23, qEpic.get(3));
     }*/
-    //Запретить дроп в лобби
-    @EventHandler
-    public void OnDropInLobby(PlayerDropItemEvent event) {
-        if (!GameStart) {
-            event.setCancelled(true);
-        }
-    }
 
 }

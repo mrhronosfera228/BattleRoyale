@@ -1,6 +1,7 @@
 package battleroyale.battleroyale.player;
 
 import battleroyale.battleroyale.BattleRoyale;
+import battleroyale.battleroyale.GameLogic.DamageIndicator;
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -15,11 +16,20 @@ public abstract class RoyalDamageable {
         //получаем значение здоровья игрока (если игрок имеет метаданные то получаем значение из них если нет то устанавливаем 20
         this.health = this.max_health = player.hasMetadata("royal_health") ? player.getMetadata("royal_health").get(0).asInt() : 20;
     }
-    public void damage(RoyalDamageable damager, int damage) {
+    public void damage(RoyalDamageable damager, int phys, int mag, String znak) {
         Player player1 = getPlayer();
         if (player1 != null) {
+            if (damager != null) {
+                if (mag != 0) {
+                    DamageIndicator.createIndicator(player1.getLocation(),true, 1, znak + "-%d ❤" + znak + "-%d ★", "&4&l", phys, "&3&l", mag);
+                } else {
+                    DamageIndicator.createIndicator(player1.getLocation(),true, 1, znak + "-%d ❤", "&4&l", phys);
+                }
+            } else {
+                DamageIndicator.createIndicator(player1.getLocation(),true, 1, znak + "-%d ❤", "&4&l", phys);
+            }
             player1.playEffect(EntityEffect.HURT);
-            int health = this.getHealth() - damage;
+            int health = this.getHealth() - (phys + mag);
             if (health <= 0) {
                 this.kill(damager);
             } else {

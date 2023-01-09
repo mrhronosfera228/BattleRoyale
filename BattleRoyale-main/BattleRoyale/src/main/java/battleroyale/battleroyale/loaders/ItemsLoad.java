@@ -11,10 +11,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class ItemsLoad {
-    public static List<ItemStack> qCommon = new ArrayList<>();
-    public static List<ItemStack> qRare = new ArrayList<>();
-    public static List<ItemStack> qEpic = new ArrayList<>();
-    public static List<ItemStack> qLegendary = new ArrayList<>();
+    private static List<ItemStack> qCommon = new ArrayList<>();
+    private static List<ItemStack> qRare = new ArrayList<>();
+    private static List<ItemStack> qEpic = new ArrayList<>();
+    private static List<ItemStack> qLegendary = new ArrayList<>();
     private static final Map<Integer, RoyalItemPrototype> common = new HashMap<>();
     private static final Map<Integer, RoyalItemPrototype> rare = new HashMap<>();
     private static final Map<Integer, RoyalItemPrototype> epic = new HashMap<>();
@@ -27,7 +27,7 @@ public class ItemsLoad {
         toLoad(qEpic, "royal_items", "EPIC", epic);
         toLoad(qLegendary, "royal_items", "LEGENDARY", legendary);
     }
-    public static void toLoad(List<ItemStack> list, String tableName, String quality, Map<Integer, RoyalItemPrototype> prototype) {
+    private static void toLoad(List<ItemStack> list, String tableName, String quality, Map<Integer, RoyalItemPrototype> prototype) {
         SqlManager.findAsync("SELECT * FROM " + tableName + " WHERE quality = '" + quality + "'", new Callback() {
             @Override
             public void onQueryDone(ResultSet result) {
@@ -54,5 +54,21 @@ public class ItemsLoad {
                 }
             }
         });
+    }
+
+    public static List<ItemStack> getqCommon() {
+        return qCommon;
+    }
+
+    public static List<ItemStack> getqEpic() {
+        return qEpic;
+    }
+
+    public static List<ItemStack> getqLegendary() {
+        return qLegendary;
+    }
+
+    public static List<ItemStack> getqRare() {
+        return qRare;
     }
 }

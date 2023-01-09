@@ -2,17 +2,21 @@ package battleroyale.battleroyale.loaders;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.Arrow;
+import org.bukkit.util.Vector;
 
 
 public class PlaneLoad {
-    public static Entity planeStart;
+    private static Arrow planeStart;
     //Реализация стартового самолёта
     public static void load(){
-        Location locStart = new Location(Bukkit.getWorld("world"), 709, 100, 709);
-        planeStart = Bukkit.getServer().getWorld("world").spawn(locStart, Snowball.class);
+        Location locStart = new Location(Bukkit.getWorld("battle"), 700, 100, 700);
+        planeStart = Bukkit.getServer().getWorld("battle").spawnArrow(locStart, new Vector(690, 100, 690), 0,100);
         planeStart.setGravity(false);
+    }
+
+    public static Arrow getPlaneStart() {
+        return planeStart;
     }
 }
 

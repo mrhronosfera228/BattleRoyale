@@ -22,7 +22,7 @@ public class ChestLoad {
         toLoad("chest_legendary", legendary);
     }
     private static void toLoad(String tableName, List<Location> map) {
-        SqlManager.findAsync("SELECT * FROM " + tableName, new Callback() {
+        SqlManager.findAsync(SqlManager.prepare("SELECT * FROM "+ tableName +""), "SELECT", new Callback() {
             @Override
             public void onQueryDone(ResultSet result) {
                 try {

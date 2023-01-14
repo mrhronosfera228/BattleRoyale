@@ -17,7 +17,7 @@ public class RoyalItemManager {
     public RoyalItemManager() {
     }
     public static void initialize() {
-        SqlManager.findAsync("SELECT * FROM royal_items", new Callback() {
+        SqlManager.findAsync(SqlManager.prepare("SELECT * FROM royal_items"),"SELECT * FROM royal_items", new Callback() {
             @Override
             public void onQueryDone(ResultSet result) {
                 Throwable var1 = null;

@@ -88,7 +88,7 @@ public class WorkerCommand extends AbstractCommand implements Listener {
             if (event.getBlock().getType().equals(Material.CHEST)) {
                 Block block = event.getBlock();
                 block.setMetadata(c, new FixedMetadataValue(BattleRoyale.getInstance(), "block"));
-                SqlManager.findAsync("INSERT INTO `%s` (`world`, `x`, `y`, `z`) VALUES ('%s','%s','%s','%s');", new Callback() {
+                SqlManager.findAsync(SqlManager.prepare("INSERT INTO "+ tableName +" (`world`, `x`, `y`, `z`) VALUES (?, ?, ?, ?);", block.getWorld().getName(), block.getX(), block.getY(), block.getZ()), "INSERT", new Callback() {
                     @Override
                     public void onQueryDone(ResultSet result) {
                         try {
@@ -97,7 +97,7 @@ public class WorkerCommand extends AbstractCommand implements Listener {
                             throw new RuntimeException(e);
                         }
                     }
-                }, tableName, block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+                });
             }
         }
     }

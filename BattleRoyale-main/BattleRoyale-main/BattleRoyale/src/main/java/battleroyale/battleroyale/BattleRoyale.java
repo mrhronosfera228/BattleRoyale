@@ -1,7 +1,6 @@
 package battleroyale.battleroyale;
 
 import battleroyale.battleroyale.GameLogic.Game;
-import battleroyale.battleroyale.commands.SetDescriptionCommand;
 import battleroyale.battleroyale.loaders.PlaneLoad;
 import battleroyale.battleroyale.commands.GameStartCommand;
 import battleroyale.battleroyale.commands.ItemCommand;
@@ -37,7 +36,6 @@ public final class BattleRoyale extends JavaPlugin {
         new ItemCommand();
         new GameStartCommand();
         new WorkerCommand();
-        new SetDescriptionCommand();
         EventsLoader.load();
         Bukkit.getServer().setWhitelist(false);
     }

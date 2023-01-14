@@ -22,13 +22,13 @@ public class ItemsLoad {
 
 
     public static void load() {
-        toLoad(qCommon, "royal_items", "COMMON", common);
-        toLoad(qRare, "royal_items", "UNCOMMON", rare);
-        toLoad(qEpic, "royal_items", "EPIC", epic);
-        toLoad(qLegendary, "royal_items", "LEGENDARY", legendary);
+        toLoad(qCommon, "COMMON", common);
+        toLoad(qRare, "UNCOMMON", rare);
+        toLoad(qEpic, "EPIC", epic);
+        toLoad(qLegendary, "LEGENDARY", legendary);
     }
-    private static void toLoad(List<ItemStack> list, String tableName, String quality, Map<Integer, RoyalItemPrototype> prototype) {
-        SqlManager.findAsync("SELECT * FROM " + tableName + " WHERE quality = '" + quality + "'", new Callback() {
+    private static void toLoad(List<ItemStack> list, String quality, Map<Integer, RoyalItemPrototype> prototype) {
+        SqlManager.findAsync(SqlManager.prepare("SELECT * FROM royal_items WHERE quality = ?",  quality),"SELECT * FROM royal_items WHERE quality = ?", new Callback() {
             @Override
             public void onQueryDone(ResultSet result) {
                 try {
